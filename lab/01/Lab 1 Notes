@@ -1,0 +1,45 @@
+ECE 3220 LAB 1 NOTES:
+
+gcc compiler steps (default workflow):
+1. cpp (preprocessor) compiles all of the preprocessing commands
+2. gcc (translator/compiler of code into object module)
+3. object module (.o file) (ex: ./a.o) is 32/64 bit executable code
+4. Linker uses object module and links it to the ./a.out executable command (executable image)
+5. start up code run when object invoked/ Shutdown when object is finished
+
+In this class we must use:
+- std=c11 -ggdb -og 		For the gcc command line
+
+Make program notes:
+- Some tasks are so commonly done that they write compilation rules put into the make program themselves. In the make catalog of rules some of these are outlined.
+	EXAMPLES: n.o is automatically made from recipe line $(CC) $(CPPFLAGS) $(CFLAGS) -c
+						     	      ^lang ^preprocessorflgs ^c flags ^compile
+	. Because of this we don't need to specicfy a make file, we can call it on any make target file
+		EXAMPLE: make hello-world-c
+
+- Think of the CPPFLAGS as a directory search path to include things! And other commands as some type of specifier.
+	EXAMPLE: CPPFLAGS := -I ~/project/include
+		 CXXFLAGS : = -std=c11 -ggdb -0g
+		 CFLAGS := -std=c11 -ggdb -0g
+		 LDFLAGS := Link Flags
+
+- Sometimes make files use CXX because the + sign is not a valid variable character (rotated plus)
+- Compiler will not run if the timestamp on the executable image is newer than the source code file
+- ls -l allows you to view a long listing of information for each file. The first thing that comes up is the permissions.
+	Permissions Flags: r = read, w = write, x = executable format rwx rwx rwx
+								      ^G1 ^G2 ^G3
+			   Note: group one refers to the owner, group two refers to the primary group, group three refers to other
+- listing (ls -l) on directories have flag d = directory, an x bit means that you have permisson to get into the inner folders of that directory.
+- man program (short for manual) will give you access to program documentation. EXAMPLE: $man make (exit with q)
+	. Note: There is also an info program that does largely the same thing.
+
+GNU C++ COMPILER:
+- The g++ command notates this compiler
+- This line will translate the .cpp program into an executable file image: 
+g++ -std=c++11 -ggdb -Og -o hello-world-cpp hello-world-cpp.cpp
+- echo $ command prints the make exit code (0 for when everything is all good)
+
+Tarball Files and how they work:
+tar -tzf ece3220-lab01-$USER.tar.gz
+TAR stands for tape archive    t: list of files 	z: invokes zip compression algorithm
+
