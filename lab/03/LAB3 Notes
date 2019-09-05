@@ -1,0 +1,45 @@
+Lab 3 - GNU Debugger (gdb)
+
+- Inject additional instrumentation code (debugger) by compiling with "gcc -ggdb -O" or "gcc -g -o <exec> <name>.c"
+
+GNU Debugger has two modes:
+- No interuption mode
+- Breakpoint mode (GDB prompt mode)
+	Commands:
+	-> list (lists ten instructions from the c file)
+	-> step (INTO into the subroutine. Steps one step through your source code)
+	-> print<ARG> (allows you to view the values of the variables)		Can also use p (non ambigous command)
+	-> x<ARG> (examine a variable in its hexadecimal bytecode. Argument is assumend to be the address of variable)		x/10b for example can show you a number of bytes at memory address.
+	-> next (OVER ignores subroutine. Steps over one step through the source code)
+	-> stop (pauses the program)
+	-> start (resumes the paused program)
+	-> watch<ARG> (adds a watch to a variable. Notice when value changes. Outputs the step-by-step value of variable)
+	-> rwatch<ARG> (adds a watch to a variable. Notice when value is read)
+	-> break<line> (adds a breakpoint to the line specified)
+	-> bt	(back traces. Looks at the top of the call stack)
+	-> frame (edits the context for access to local variables outside of the current frame)
+	-> cont (continues the run)
+	-> quit (exits the debugger)
+	-> info<watch/break> (shows information relevant to the watches or breakpoints)
+	-> set<ARG> = <VAL> (simulates desired data into a variable)
+
+	Quick Reference Command Link: http://users.ece.utexas.edu/~adnan/gdb-refcard.pdf
+
+- Notice: Anything within libraries that you didn't insert debugging instrumentation into will be steped over in the debugging phase.
+- The start command will clear out all of the watches and breakpoints.
+- Currently active block of code is always stack frame 0, and increments moving up the call stack.
+
+What the makefile command means:
+	cc -std=c11 -O0 -ggdb SegFault_example.c -o SegFault_Example
+	^c comp ^ver ^opt off ^debug ^c file      ^turn into obj ^executable obj name
+
+
+
+
+LAB QUESTIONS:
+How many elements does the array c[] have?
+What is the smallest offset value k=? into array c[] (i.e., c[k]) that produces defined results at run time?
+What is the largest offset value k=? into array c[] (i.e., c[k]) that produces defined results at run time?
+Should the expression ‘c[1000]’ produce defined or undefined behavior at run time?
+
+
