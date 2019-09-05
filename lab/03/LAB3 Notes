@@ -37,9 +37,11 @@ What the makefile command means:
 
 
 LAB QUESTIONS:
-How many elements does the array c[] have?
-What is the smallest offset value k=? into array c[] (i.e., c[k]) that produces defined results at run time?
-What is the largest offset value k=? into array c[] (i.e., c[k]) that produces defined results at run time?
-Should the expression ‘c[1000]’ produce defined or undefined behavior at run time?
+How many elements does the array c[] have? 			ANSWER:10000
+What is the smallest offset value k=? into array c[] (i.e., c[k]) that produces defined results at run time? ANSWER: 0
+What is the largest offset value k=? into array c[] (i.e., c[k]) that produces defined results at run time? ANSWER: 999
+Should the expression ‘c[1000]’ produce defined or undefined behavior at run time?	ANSWER: Defined
+
+
 
 

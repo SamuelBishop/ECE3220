@@ -3,7 +3,7 @@
 
 void tester(int* c, int k) {
 	printf("x[%d] = %d\n", k, c[k]);
-	c[10000]=1309;
+	c[999]=1309;
 }
 
 int main(int argc, char* argv[]) {
@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
 		i++;
 	}
 
-	printf("Enter an integer between 0 to 9999: ");
+	printf("Enter an integer between 0 to 999: ");
 	fflush(stdout);
 	scanf("%d",&k);
 
