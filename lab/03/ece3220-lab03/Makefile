@@ -1,20 +1,16 @@
-# Samuel Bishop
-# Fischer
-# Software Dev in C/C++
-# September 5, 2019
+CFLAGS := -std=c11 -O0 -ggdb
 
 
-CPPFLAGS := # This is how you would apply rules to preprocessor flags
-CFLAGS := -std=c11 -ggdb -O0 # Additional instrumentation that applies when compiling c code
-CXXFLAGS := -std=c++11 --ggdb -O0 # Additional instrumentation that applies when compiling c++ code
-LDD := # This is how you would provide linker instructions
-
-PROGRAMS :=
+PROGRAMS := \
+	gdb-ex1 \
+	gdb-ex2 \
+	gdb-ex3 \
+	gdb-ex4 \
 	SegFault_Example
 
-$(PROGRAMS): 
+.PHONY : all
+all : $(PROGRAMS)
 
-.PHONY : all 		# Gets rid of executable at runtime so you don't have to retouch the c file every make
-clean : ; rm -f $(PROGRAMS)
-
-#SegFault_Example:	# This is how you turn the .c file -> .o file -> executable
+.PHONY: clean
+clean:
+	-rm -r $(PROGRAMS)

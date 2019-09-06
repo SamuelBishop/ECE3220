@@ -4,7 +4,7 @@ int main()
 {
     char *fileName;
     printf("Specify file name you would like to print to: \n");
-    scanf("%s",&fileName);
+    scanf("%s",fileName);
     
     FILE* file1 = fopen(fileName, "a+");
  
