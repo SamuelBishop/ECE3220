@@ -1,0 +1,19 @@
+// Samuel Bishop
+// Professor Fischer
+// ECE 3220: Software Dev in C/C++
+// August 24, 2019
+
+/* GENERAL INCLUDES */
+#include <stdio.h>
+#include <iostream>
+
+/* CONSTANT DECLARATIONS */
+
+/* FUNCTION DECLARATIONS */
+
+/* MAIN */
+int main()
+{
+        return 0;
+}
+
