@@ -1,0 +1,67 @@
+Lecture Notes 9/11/19: An introduction to IO and Strings
+
+:: Scope and you can nest scopes with A::B::C::D
+
+POSIX: 		f.d.#  		(within c these steams already included in the operating system)
+stdin		0		// Handles inputs
+stdout		1		// Handles outputs
+stderr		2		// Handles error messages
+
+NOTE: In c++ the log steam is also defined.
+stdlog		*		// Handles logging the other stream inputs
+
+
+
+Predefined iostream objects:
+	8-bit presets
+	. cin (0)
+	. cout (1)
+	. cerr (2)
+	. clog (imp defined)
+	
+	Wide char sets (unicode)
+	wcin (0)
+	wcout (1)
+	wcerr (2)
+	wclog (imp defined)
+
+	Manipulators
+	flush
+	endl
+	ends (string-based streams)
+	(and many more)
+
+
+
+Commonly-Used I/O Stream Classes:
+istream - generic input
+ostream - generic output
+iostream - generic input/output
+
+Operators:
+<< Insertion operator
+Big advantage of c++: Can define your own data type and append the data type to the std::cout stream and it will be processed
+	Example: This is what the compiler does in this situation
+		std::cout.operator<<( "Value = " ); //knows how to invoke the operator function in order to get a string literal
+		std::cout.operator<<( value );
+		std::cout.operator<( m );
+
+		Notice that each expression above returns std::cout!
+
+		when compounded these expressions become std:cout.operator<<("Value".operator<<(value).operator<<(m)
+
+Data types that input/output strings know about:
+- bool
+- short
+- ushort
+- int
+- long
+etc.
+If you make your own data type to put into an iostream you have to create your own legibility function for the type processing.
+
+Sending streams places:
+Example: 
+2>dev/null //sends the stderr stream to the "bit bucket" debugging stream
+
+cout/cin linkage:
+- whenever you attempt to input with cin the cout buffer will be flushed
