@@ -1,0 +1,43 @@
+There is no reason to do this (if you don't use the variable frequently):
+	int n{5}; // instantiates the var n to 5
+	
+Because you can do this:
+	int{5}; // creates an anonymous int without a name that holds data 5
+
+This concept is similar to the throw command:
+	throw runtime_error("Invalid number of command line args."); // Throws data from an anonymous string
+
+- Sidenote: Flushing doesn't matter on cerr stream because it has no output
+
+String Stream Objects: 
+istreamstrings -> Can only use the extraction operator >>
+ostreamstrings -> Can only use the insertion operator <<
+iostreamstrings -> Can use both operators
+
+Subtle difference between c and c++: % = type specifier manipulator
+	%0.2d -> 0 padding and 2 digets for a double in c++
+	// this probably functions the same as c
+
+
+stream error method processing: (IO library in base class)
+	Three different key bit flags:
+	1. eofbit
+	2. failbit
+	3. badbit	(buffer related problems)
+
+	State flag functions:
+	(if all three flags are false)	good -> checks if the state of the stream is good
+	(if eof bit is true)		eof -> checks if the eof bit is set
+	(if failbit is true)		fail -> checks whether the failbit or badbit is set
+	(if badbit is true)		bad -> checks whether the badbit is set
+
+	NOTE: After any of these flags are asserted, stream basically becomes unusable.
+	EX: cin >> n FAILS so cin >> m; WILL FAIL
+
+- Unary operators: (single components or element)
+	+, -, !, ~, ++, --, ()
+- Binary operators: (two components or elements)
+	+, -, /, *, %, >>, <<, ==, !=, <, >, etc.
+- Ternary operators: (three componenets or elements)
+	
+vector is a template class. Dynamically scalable.
