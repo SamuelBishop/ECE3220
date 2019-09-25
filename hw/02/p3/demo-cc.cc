@@ -1,7 +1,7 @@
 /* demo-cc.cc */
 
 // function declaration
-void foo();
+extern "C" void foo();
 
 int main()
 {
