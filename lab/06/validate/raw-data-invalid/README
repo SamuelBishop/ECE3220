@@ -1,0 +1,51 @@
+# The files in this directory contain errors and should be used to verify your
+# program's error detection / reporting when reading and processing the 
+# information in the input data file 'raw_data_NN.txt'.
+
+raw_data_01.txt
+* Empty file
+
+
+raw_data_02.txt
+* valid data set size value (1 <= VALUE)
+* missing max value for data
+* missing data
+
+
+raw_data_03.txt
+* invalid data set size value (VALUE < 1)
+* missing max value for data
+* missing data
+
+
+raw_data_04.txt
+* valid data set size value (1 <= VALUE)
+* valid max value for data (0 <= VALUE)
+* missing data
+
+
+raw_data_05.txt
+* valid data set size value (1 <= VALUE)
+* invalid max value for data (VALUE < 0)
+* missing data
+
+
+raw_data_06.txt
+* valid data set size value (1 <= VALUE)
+* valid max value for data (0 <= VALUE)
+* valid data values
+* too few data values (data set size < data set size value)
+
+
+raw_data_07.txt
+* valid data set size value (1 <= VALUE)
+* valid max value for data (0 <= VALUE)
+* invalid data values (data values > max value for data)
+
+
+raw_data_08.txt
+* valid data set size value (1 <= VALUE)
+* valid max value for data (0 <= VALUE)
+* valid data values
+* too many data values (data set size > data set size value)
+

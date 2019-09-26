@@ -25,6 +25,8 @@ stream error method processing: (IO library in base class)
 	2. failbit
 	3. badbit	(buffer related problems)
 
+	(4. Goodbit, all other bits are not on.)
+
 	State flag functions:
 	(if all three flags are false)	good -> checks if the state of the stream is good
 	(if eof bit is true)		eof -> checks if the eof bit is set
@@ -40,4 +42,31 @@ stream error method processing: (IO library in base class)
 	+, -, /, *, %, >>, <<, ==, !=, <, >, etc.
 - Ternary operators: (three componenets or elements)
 	
+
 vector is a template class. Dynamically scalable.
+
+- The ! operator only checks the badbit and the fail bit!
+- If failbit is set and eofbit is not set, we have bogus data.
+
+New Syntax I didn't know about before:
+"RANGE"
+EX: for( value : files ) // iterates over container objects
+
+"AUTO"
+EX: imagine vector<int> -> (auto value : file_values) // Compiler will figure out data type. Kind of just happens in higher level languages automatically.
+
+- cat command will dump all of the content of the files within into standard output cout
+
+EX: 12a34 will return 12 within the program and the return an error because the fail bit was set not at the end of file. & parsing
+	only occurs until it hits a not integer value.
+
+- The >> and << operator will automatically skip over white space for us. This is handy for this scenario.
+EX: (read.txt)
+123
+456
+
+
+789 (end)
+this will work and save 3 different integer values to write to the write file!
+
+

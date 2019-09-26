@@ -1,0 +1,13 @@
+Use the 'test-*.sh' scripts in this directory to validate your lab7 program.
+
+##########################################################################
+
+test-n.sh
+
+This script exercises the command line option '-n FILENUM'. It also checks your
+program's response when processing 'raw_data_NN.txt' files whose contents are
+invalid (./raw-data-invalid/*) and correct data (./raw-data-valid/*).
+
+EXAMPLE INVOCATION
+$ ./test-n.sh
+

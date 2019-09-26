@@ -180,7 +180,10 @@ int main(int argc, char *argv[])
 
         // Write the values from the vector object 'file_values' into the
         // output file.
-        for ( int value : file_values )  {  // <- C++11 "range for" loop
+        for ( auto value : file_values )  {  // <- C++11 "range for" loop
+						// vector is a container class. C++ implements the "range" method for iterating
+						// over container objects
+						// Auto keyword means: 
 					    // this is the same thing as all elements in range! for(int i = 0; i < len; i++)
             ofs << "Data " << setfill(' ')
                 << setw(12) << right << dec << value << ':'

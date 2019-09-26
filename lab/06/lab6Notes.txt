@@ -1,0 +1,20 @@
+How to do this lab:
+- Create a c++ file executable that takes in the contents:
+	. -n FILENUM
+	. -a OFFSET
+	. -s SCALE_FACTOR
+	. -h (help)
+	. -d DATA_DIR // The path to the data that we will use
+
+- One of the tricky parts is that -h can appear anywhere and we will have to ignore all the other tokens and print the help message
+
+How it works:
+reads the file data and adds the data to a row, and scales the data to a different row.
+
+Need to output all the errors within this program to stderr (cerr stream)
+REMINDER: There are 3 posix (unix) std streams. 0 stdin, 1 stdout, 2 stderr
+
+ERROR IN THE LAB WRITEUP: in 5.3. the offset_data_NN.txt should be scaled_data_NN.txt
+
+
+
