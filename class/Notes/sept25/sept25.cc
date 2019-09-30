@@ -1,7 +1,7 @@
 // Go home and read about this stuff online. I'm too tired to pay attention to this right now.
 
 
-// The three types of access specifiers
+// The three types of access specifiers (comes into play when you do inheritance)
 // public
 // protected
 // private
@@ -33,7 +33,7 @@ public:
 	// Y( const Y &yobj ) : n(yobj.n), mc(yobj.mc), dp(new double(*yobj.dp)) // deep copy
 
 	// copy assignment
-	operator = ( const Y &rhs ) {
+	operator = ( const Y &rhs ) { // the rhs needs to be const to ensure the rhs data doesn't change upon assignment
 		this->n = rhs.n;	// shallow copy
 		this->mc = rhs.mc;	// shallow copy
 		*(this->dp) = *rhs.dp; // this will be a deep copy
@@ -52,7 +52,7 @@ public:
 	}
 
 	// get 'accessor' method
-	int gen_n(){ return n; }
+	int get_n(){ return n; }
 
 	private:
 	int n; // assume we need a bounds between [0..5]
@@ -63,6 +63,23 @@ class Y{ // will default to private if not specified (usually data of class need
 private:
 	int n;
 	myclass mc;
+	double *dp;
+
+
+	/* What happens when a method is called in assembly language:
+	1. Take object, make a copy and push the copy onto the stack
+	2. Modify the copied object
+	3. Pop the copied object off the stack and copy it over to the original variable
+
+	NOTE: You can skip this with the inline variable.
+	Example ->
+	inline int get_n() const { return this->n; } // Unprivatizes the class object
+										         // Anytime we do a read we need the class object to be in "read-only mode"
+												 // Whenever doing a get treat the pointed to object as a constant value
+	X x1(5);
+	int value;
+	value = x1.get_n();
+	*/
 }
 
 int main(){
