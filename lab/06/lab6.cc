@@ -1,10 +1,16 @@
 /* main.cc */
 
+// IMPORTANT NOTES
+// echo $? after a run will return the exit code
+
+
 // imported libraries
 #include <string>		// probably a good idea to alphabetize these if this was production code
 #include <stdexcept>
 #include <iostream>
 #include <sstream>
+#include <vector>
+#include <iomanip>
 
 // namespace
 using namespace std;
@@ -13,7 +19,7 @@ using namespace std;
 
 /* -n */
 bool cloFilenum = false;
-bool cloFilenumValue = 0;
+int cloFilenumValue = 0;
 
 /* -a */
 bool cloOffset = false;
@@ -45,6 +51,132 @@ public:
 };
 
 //==========FUNCTION DECLARATION==========
+void display_help_message()
+{
+
+    // lowercase u is undo in visual mode
+    // :set will allow you to view your bash settings
+    /* formatting
+    1. :set tw=65
+    2. visual line mode and select
+    3. gq
+    */
+
+    // how to edit bash script
+    // :e~/.vimrc
+
+    // This will be a multiline string literal
+    const char* help_message = R"(
+SYNOPSYS
+    lab6 -n FILENUM [-a OFFSET] [-d DATADIR] [-s SCALE_FACTOR]
+    lab6 -h
+
+OPTIONS
+    -a OFFSET
+        The specified OFFSET value is added to each sample data
+        value read from input file raw-data-NN.txt. The transformed
+        data values are written into a file named
+        offset-data-NN.txt, where NN is a two digit, zero-padded
+        integer value whose value is specified by the -n option. For
+        example, for -n 3, NN’s value is 03, and program lab6 writes
+        the transformed data into a file named offset-data-03.txt.
+
+    -d DATA_DIR
+        If the raw data files raw-data-NN.txt do not reside in the
+        current working directory, use this option to specify the
+        path to the directory where the files reside. If this
+        program generates new files that contain transformed data,
+        those new files will be stored in the DATA_DIR directory.
+
+    -h HELP
+        Displays a useful message that describes how to use this
+        program.
+
+    -n FILENUM
+        FILENUM is an integer value between 1 and 99 inclusive.
+        Program lab6 reads data from a text file named
+        raw-data-NN.txt where NN is a two digit, zero-padded
+        integer value whose value is specified by FILENUM. For
+        ECE 3220 Software Design in C and C++, 2019 Fall 4
+        example, if FILENUM’s value is 3, then NN’s value is 03, and
+        program lab6 reads from file raw-data-03.txt.
+
+    -s SCALE_FACTOR
+        Each sample data value read from input file raw-data-NN.txt
+        is multiplied by the specified SCALE_FACTOR value. The
+        transformed data values are written into a file named
+        scaled-data-NN.txt, where NN is a two digit, zero-padded
+        integer value whose value is specified by the -n option. For
+        example, for -n 3, NN’s value is 03, and program lab6 writes
+        the transformed data into a file named scaled-data-03.txt.
+)";
+
+    cout << help_message << endl;
+}
+
+//========================================
+
+void
+read_data_from_file( const string &fname, vector<int> &data_values ) // pass by reference, (temporarily refer to passed in type object by different name)
+{
+    // flesh out later
+}
+
+//========================================
+
+void
+create_offset_output_file( const string &fname, const vector<int> data_values, const double offset )
+{
+    // flesh out later
+}
+
+//========================================
+
+void
+create_scaled_output_file( const string &fname, const vector<int> data_values, const double scaledValue ){
+    // flesh out later
+}
+
+//========================================
+
+// by passing by reference you save space on the stack because you don't have to make a copy of the variable
+// he said convering constructor to convert a string literal into a C++ string object for the second arg
+
+string
+create_file_path( const string datadir, const string &fname_prefix, const int filenumValue ){
+    // flesh out later
+    ostringstream fpath;
+
+    if( !datadir.empty() ){
+    // Write the path to the directory that contains the dat files.
+    fpath << datadir;
+
+    // The user might specify the path string one of two ways:
+    //  -d path
+    //  -d path/
+    // So we need to add a '/' if it's not already present in the user-supplied path string
+    if( datadir.back() != '/' ){
+        fpath << '/';
+    }
+
+    }
+
+    // Write the file name prefix string
+    fpath << fname_prefix;
+
+    // Write the file numer as a zero-padded value in a two character wide
+    // field.
+    fpath << setw(2) << setfill('0') << filenumValue; // do not set fill without the single quotes
+
+    // Write the ".txt" file extension
+    fpath << ".txt";
+
+    cerr << "fpath.str() = |" << fpath.str() << "|\n"; // remember you can view cerr by: 
+
+    return fpath.str();
+ }
+
+//========================================
 
 double // Note these are called stub functions
 read_double_from_command_line(char *option, char *arg)
@@ -61,6 +193,7 @@ read_double_from_command_line(char *option, char *arg)
 }
 
 //========================================
+
 
 int // Note these are called stub functions
 read_int_from_command_line(char *option, char *arg)
@@ -84,7 +217,7 @@ read_string_from_command_line(char *option, char *arg)
 	//string value( arg ); // access the constructor of the string class
                          // because of the way the destructor works then we return a temp copy of the value
 	//return value;
-
+    
     // Or simply do this
     return string( arg );
 }
@@ -92,6 +225,8 @@ read_string_from_command_line(char *option, char *arg)
 //string x;
 //x = read_string_from_command_line( ... );
 //========================================
+
+
 
 int main ( int argc, char* argv[] ){
 	int exit_code = 0; // start assuming everything will be fine
@@ -150,9 +285,9 @@ int main ( int argc, char* argv[] ){
 					// EXECUTE a code
 					cloHelp = true;
 					++i; // Bump up I to the next argument and then examine the value past it
-					if( i >= argc ){
-						throw command_line_error("Missing required argument for option '-h'.");
-					}
+					//if( i >= argc ){
+					//	throw command_line_error("Missing required argument for option '-h'.");
+					//}
 				}
 
 				else if( argv[i][1] == 'd' ){
@@ -171,6 +306,53 @@ int main ( int argc, char* argv[] ){
 					throw command_line_error( msg.str() ); // make a ostringstream here later so user can see what's going on
 				}
 		}
+
+        //
+        // Validate the command line
+        //
+
+       
+        if ( cloHelp ) {
+            // Option 1) ./lab6 -h
+            display_help_message();
+        }
+        else if ( cloFilenum ) {
+            // Option 2) ./lab6 -n FILENUM [-a OFFSET] [-d DATADIR] [-s SCALE_FACTOR ]
+         
+            // Need to create a vector to store data values
+            vector<int> data_values;
+            
+            // Create a string to hold the path name
+            string fname;
+
+
+            // Given the user-specified command line options, create the file
+            // path string for the file we want to read from.
+            //
+            // Note we want something like this: /read-raw-NN.txt
+            //                                   ^1 ^2     ^3 ^4
+            fname = create_file_path( cloDataDirValue, "read-raw-", cloFilenumValue );
+
+            read_data_from_file( fname, data_values );
+            if ( cloOffset ){
+                // Given the user-specified command line options, create the file
+                // path string for the file we want to write into.
+                fname = create_file_path( cloDataDirValue, "offset-data", cloFilenumValue );
+
+                create_offset_output_file( fname, data_values, cloOffsetValue);
+            }
+            if ( cloScaled ) { 
+                // Given the user-specified command line options, create the file
+                // path string for the file we want to write into.
+                fname = create_file_path( cloDataDirValue, "scaled-data", cloFilenumValue );
+
+                create_scaled_output_file( fname, data_values, cloScaledValue);
+            }
+        }
+        else{
+            // throw_command_line_error("Invaid command line.");
+        }
+
 	}
 	// block replacement: In visual mode select the lines hit : and the type s/string_to_replace/string_replacing/g (global)
 
@@ -192,7 +374,7 @@ int main ( int argc, char* argv[] ){
         exit_code = 3;
     }
 
-    printf("exit code: %d\n", exit_code);
+    printf("exit code: %d\n\n", exit_code);
 	return exit_code;
 }
 
