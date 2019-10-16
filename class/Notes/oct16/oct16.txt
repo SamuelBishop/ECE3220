@@ -1,0 +1,101 @@
+Notes Oct 16:
+- Get to know:
+    . Shallow vs deep copy (shallow = copy address, duplicate object = deep copy)
+    . Member initializer lists
+
+Copy assignment operator:
+
+//########################CODE###########################//
+class X(X& operator(const X &rhs) { /*...*/ return *this; } ... }; // Always ends by returning reference to left hand term
+
+void foo(){
+    X x1, x2;
+    x1 = x2; //x1.operator(x2), copy assignment
+}
+//#########################END###########################//
+
+
+
+Constructing Derived Classes:
+
+//########################CODE###########################//
+class Y: public X{ // Only things that were public in X can be accessed by Y
+    ...
+}
+//#########################END###########################//
+
+
+
+Friend declarations:
+- Not class members but functions that can access private members of a class
+
+//########################CODE###########################//
+class X{
+public:
+    X(){};
+    ~X();
+private:
+    int val;
+    friend void foo( X & ); // can declare these anywhere within the class
+};
+
+void foo( X &x ){
+    return x.val;   // since the function has been friended, all access specifiers avoided
+};
+//#########################END###########################//
+
+
+
+Operator Overloading:
+- The examples below show how to overload the addition operator '+' for user-definded class T
+- How to use:
+    . a + b // commonly used notation
+    . a.operator+(b) // function notation that is actually called
+
+//########################CODE###########################//
+// Operator overloading via an ordinary function ('T' is a defined type)
+// These are all known as unary operators. Takes in one argument.
+T operator+(const T &lhs, const T &rhs)
+{
+    T result;
+    /*...*/
+    return result;
+}
+
+// Operator overloading via a method of class T
+T T::operator+(const T &rhs) const // end const applies to the this ptr
+{
+    T result;
+    /*...*/
+    return result;
+}
+
+// EXAMPLE += (This is all within the public specifier of a class)
+    X& operator += ( const X &rhs ) { ...; return *this };
+
+// Problem a++, ++a. How do we tell the difference?
+    X& operator ++ () // prefix incremenet (faster than postfix)
+    {
+        this->val++;
+        return *this;
+    }
+
+    X operator ++ (int) // post increment (pretty gosh dang slow)
+    {
+        X result(*this); // copy constuctor; copy x's current state
+        ++value;         // increment x.value
+        return result;   // return x's original state
+    }
+//#########################END###########################//
+
+
+
+The new thing that he was just talking about:
+- 
+//########################CODE###########################//
+    // within the public section of the class
+    // X x1;
+    // if ( x1 ) then ... This is a lot like if( ifs ) but we can make our own. Checks the failbit and the badbit.
+    operator bool () const { return value != 0; }
+
+//#########################END###########################//
