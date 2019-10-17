@@ -2,12 +2,14 @@
 
 // IMPORTANT NOTES
 // echo $? after a run will return the exit code
-
+// ps as | grep firefox to show all of the processes running
+// kill -9 to kill it the process. 
 
 // imported libraries
 #include <string>		// probably a good idea to alphabetize these if this was production code
 #include <stdexcept>
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <vector>
 #include <iomanip>
@@ -116,25 +118,104 @@ OPTIONS
 
 //========================================
 
+// Stream buff looks at file as a sequence of characters. Just a glorified array. can parse out the space, and newline ascii chars.
+
 void
-read_data_from_file( const string &fname, vector<int> &data_values ) // pass by reference, (temporarily refer to passed in type object by different name)
+open_and_process_the_data_file( const string &fname, vector<int> &data_values ) // pass by reference, (temporarily refer to passed in type object by different name)
 {
-    // flesh out later
+    ifstream ifs; // This is an automatic storage class the compiler creates on the stack
+    ifs.open(fname); // equivalent of fopen
+    
+    if( !ifs.is_open() ){ // checks if the file is open
+	    ostringstream msg;
+		msg << "Failed to open input file " << fname << ".";
+		throw runtime_error( msg.str() ); // destructor is actually called! File is closed upon out of scope! Destructor is called upon thrown error message. Resource Aquisition is Initialization (RAII).
+    }
+
+    int data_set_size;
+    ifs >> data_set_size; // this read could fail so we need to check the failbit (read fails), badbit (read fails as result of issues w/buffer), eofbit
+    if( !ifs ){ // checks the fail and bad bits 
+	    ostringstream msg;
+		msg << "Failed to read the dataset size from file" << fname << ".";
+		throw runtime_error( msg.str() );
+    }
+
+    int upper_limit_val;
+    ifs >> upper_limit_val;
+    if( !ifs ){ // checks the fail and bad bits 
+	    ostringstream msg;
+		msg << "Failed to read the upper limit size from file" << fname << ".";
+		throw runtime_error( msg.str() );
+    }
+
+    int data_value;
+    for(int i = 0; i < data_set_size; i++){
+        ifs >> data_value;
+        if( !ifs ){ // checks the fail and bad bits 
+            ostringstream msg;
+            msg << "Failed to read data value fropen_and_process_the_data_file(om #" << (i+1) << "from file" << fname << ".";
+            throw runtime_error( msg.str() );
+        }
+
+        if( data_value < 0 || data_value > upper_limit_val ){
+            ostringstream msg;
+            msg << "Invalid data value '" << data_value << "' read from input file" << fname << ".";
+            throw runtime_error( msg.str() );
+        }
+
+        // Store the data value in our vector
+        data_values.push_back(data_value);
+    }
+
+    // POSIX always ends a file with a newline char. Need to check for this.
+    char end;
+    ifs >> skipws >> end;
+
+    // check for eof
+    if ( !ifs.eof() ){ 
+        ostringstream msg;
+        msg << "Extraneous data found after reading the last data value from file " << fname << ".";
+        throw runtime_error( msg.str() );
+    }
+    
 }
 
 //========================================
 
-void
-create_offset_output_file( const string &fname, const vector<int> data_values, const double offset )
-{
-    // flesh out later
+double add_offset( const double lhs, const double rhs ){
+    return (lhs + rhs);
 }
 
-//========================================
+double add_scale ( const double lhs, const double rhs ){
+    return (lhs * rhs);
+}
 
+
+// We might now want to use the function pointers in order to work on the file
 void
-create_scaled_output_file( const string &fname, const vector<int> data_values, const double scaledValue ){
-    // flesh out later
+create_modified_output_file( 
+const string &fname, 
+const vector<int> data_values, 
+const double offset,  
+double (*operation) (const double, const double) // This is how one declares a function pointer
+) // Can do this with function pointers
+{
+   ofstream ofs;
+   ofs.open(fname);
+
+   if(! ofs.is_open()){
+       ostringstream msg;
+       msg << "Failed to open output file' " << fname << "' for writing.";
+       throw runtime_error( msg.str() );
+   }
+
+   ofs << data_values.size();
+   ofs << ' ' << offset << '\n';
+
+   // ready to write the modified values to the output file
+   for( auto value : data_values ){ // auto's type is determined from what is stored in the container. Range for loop.
+        ofs << (*operation)(value, offset) << "\n"; // do either operation to all of the values in the vector
+   }
 }
 
 //========================================
@@ -303,7 +384,7 @@ int main ( int argc, char* argv[] ){
 				else{
 					ostringstream msg;
 					msg << "Invalid command line option'" << argv[i] << "'.";
-					throw command_line_error( msg.str() ); // make a ostringstream here later so user can see what's going on
+					throw command_line_error( msg.str() ); // make a ostringstream here later so user can see what's going onV
 				}
 		}
 
@@ -324,29 +405,29 @@ int main ( int argc, char* argv[] ){
             
             // Create a string to hold the path name
             string fname;
-
+            
 
             // Given the user-specified command line options, create the file
             // path string for the file we want to read from.
             //
             // Note we want something like this: /read-raw-NN.txt
             //                                   ^1 ^2     ^3 ^4
-            fname = create_file_path( cloDataDirValue, "read-raw-", cloFilenumValue );
+            fname = create_file_path( cloDataDirValue, "raw_data_", cloFilenumValue );
 
-            read_data_from_file( fname, data_values );
+            open_and_process_the_data_file( fname, data_values );
             if ( cloOffset ){
                 // Given the user-specified command line options, create the file
                 // path string for the file we want to write into.
                 fname = create_file_path( cloDataDirValue, "offset-data", cloFilenumValue );
 
-                create_offset_output_file( fname, data_values, cloOffsetValue);
+                create_modified_output_file( fname, data_values, cloOffsetValue, &add_offset);
             }
             if ( cloScaled ) { 
                 // Given the user-specified command line options, create the file
                 // path string for the file we want to write into.
-                fname = create_file_path( cloDataDirValue, "scaled-data", cloFilenumValue );
+                fname = create_file_path( cloDataDirValue, "scaled-data", cloFilenumValue);
 
-                create_scaled_output_file( fname, data_values, cloScaledValue);
+                create_modified_output_file( fname, data_values, cloScaledValue, &add_scale);
             }
         }
         else{
