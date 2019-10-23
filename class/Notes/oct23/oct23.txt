@@ -1,0 +1,13 @@
+Imagine a stack.
+
+https://missouri.instructure.com/courses/22221/pages/storage-class-specifiers-linkage-and-storage-duration?module_item_id=1349861
+- Static duration variables exist before main, and very breifly after main exits
+- Static changes a variable to persist through the lifetime of the program
+- Static allocates storage for variables before the function main has been called.
+
+Allocator Class Concept:
+
+Once has new (not the allocator)
+new -> 1) allocates storage 2) initialize constructor
+
+Can break these concepts up with an allocator^
