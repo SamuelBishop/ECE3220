@@ -1,0 +1,127 @@
+Info:
+
+man
+/keyword /* To search */
+n down
+N up
+gg back to the top
+/n /* next */
+q quit
+
+INFO ON RPI LAB:
+- Purpose of RPI(3):
+    . ARM CPU
+    . Can cross compile code to run with other computers on CPU
+    . A library that is needed is GNU Binutils Project (binutils) (contains linker and compiler)
+
+COMPILER IS BOTH HARDWARD AND OPERATING SYSTEM. Can't build an OS without compiler. Cant build an OS
+
+- To "bootstap" cross compiler onto development machine...
+THREE STAGES:
+    0) Tweak header files for hardware
+    1) Build toolchain (binutils -> kernel headers -> S1 bootstrap barebones compiler) 
+    2) S2 more in depth compiler
+    3) S3 is optimized compiler which is generated from S2 compiler
+
+- Need to use other libraries that are compatible with arm archetecture.
+- GNU Compiler collection has all the libraries for all the different languages (GCC)
+- We will use the GNU C Library or Embedded GNU C Library (glibc or eglibc)
+- GNU Build System (autotools)
+    . Won't get too into this but it has stuff that helps build your solution/project
+
+NOTE: Links in the lab to install on virtual machine
+
+- To get real time behavior/programming on linux kernel we need to use some really old version of the GCC 4.9.2 and glibc 2.1.9
+
+USE RPICROSS to Build a Cross Toolchain:
+- Fischer wrote a program to install the super old cross compilers for RPI.
+- This is only for home setup! Will get hella warnings because the GCC and glibc versions are so old.
+
+
+
+NOW THAT WE KNOW WHAT THIS IS AND HOW TO SET IT UP, WHERE IS THE CROSS COMPILER?
+-> Go to home directory (cd + enter)
+Answer: /usr/local
+
+- TO CREATE SYMBOLIC LINK: ln -s "directory"/ "word_to_link"
+- With cross compiler you need to specify:
+    . Processor archeticture
+    . Operating system type
+    . Specific platform that the compiler is targeting
+
+- To run a program that uses our cross compiler we have to do this:
+    *********
+
+- Basic RPI Commands that we will use regularly:
+    rpi-checkup  // checks to see if the device is up will also say IP address (after the IP address the : means the port number 2^25 port nums???)
+                 // ip address will the the last two digits of the workstation
+    rpi-ipv4addr // spits back to you the ipv4 address of the rpi
+    rpi-reboot   // reboots the pi
+    rpi-shutdown // shutsdown the pi ALTERNATIVELY (in linux os terminal) ssh root@'rpi-ipv4addr' shutdown -h now
+
+    IN PI:
+    sudo su -"user" // switches the sudo user, if user left off the default is going to be root
+
+- There are 2 users on the pi. "Root" is admin and "pi" is ordinary user
+
+- Private key vs. Public key
+    . Private key should be just you
+    . Public key we can do whatever we want with it and share it with as many people as we wont
+    . Public key works together with private key to grant access to the pi
+
+easy compilation of c++ programs: g++ -std=c++11 hello.cc -o hello
+
+COMMON ERROR: cannot executre binary file: Exec format error (you built with the wrong compiler architecture)
+
+To run the compiler/cross compiler on the arm:
+    /usr/local/rpicross/bin/arm-linux/gnueabihf-g++ -std=c++11 hello.cc -o hello
+
+NOW TO MAKE A SMART MAKEFILE TO DETERMINE WHETHER WE USE THE CROSS COMPILER OR NATIVE COMPILER:
+    /* CODE
+             
+        PROGRAM := hello
+
+        CXXFLAGS := -std=c++11
+
+        RPICROSS_BASEDIR := /usr/local/rpicross
+        RPICROSS_BINDIR := $(RPICROSS_BASEDIR)/bin
+        RPICROSS_BIN_PREFIX := arm-linux-gnueabihf-
+
+        # if this director exists then return something otherwise return the empty string
+        ifneq ($(wildcard $(RPICROSS_BASEDIR) ), )
+            CC := $(RPICROSS_BINDIR)/$(RPICROSS_BIN_PREFIX)gcc
+            CXX := $(RPICROSS_BINDIR)/$(RPICROSS_BIN_PREFIX)g++
+        endif
+
+        # true return
+        #'usr/local/rpicross' 
+        # false return
+        #''
+
+        .PHONY: all
+        all : $(PROGRAM)
+
+        .PHONY: clean
+        clean : #cleans up the o files from the listed programs
+            -rm -f $(PROGRAM) *.o 
+           
+    */
+
+- The Intel workstation has a cross compiler for arm and a native compiler
+- The ARM RPi only has its own native compiler
+
+WILDCARD FUNCTION: checks to see if something exists
+    EX: wildcard /file
+
+Showing the default of the makefile (which architecture it will compile to) before compiling. Or maybe just the make rules...:
+    
+    SHOWING RULES FOR ANY MAKE VARIABLES:
+    make -p -f/dev/null | less
+
+    ONLY SHOWING RULES FOR A SPECIFIC MAKEFILE: 
+    make -p -f Makefile | less
+
+Notation that you should know:
+    % -> filler variable. Wildcard. Scans through files to see what kind of file you have to compile and goes through them one at a time until it finds a match. FILLS IN FOR TARGET.
+
+
