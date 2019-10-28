@@ -1,0 +1,33 @@
+TAKEAWAYS:
+- To run preprocessor "cpp -P main.cc"
+    . This will pretty much just show you all of the code smooshed together
+- Declarations can be repeated within the same translation unit
+
+
+
+Terms I should be familiar with:
+- Definition (the thing) vs declaration (telling the complier about the thing)
+    . Class definition requires some storage. Template definition does not do anything without an obj declared in code.
+- Include Guard
+    . Aka header guard, header include guard
+
+    Used to create non-circular include lists
+
+    #ifndef DELETEME_H // if the macro (header file) is not defined. These need to be statistically unique (EX: ECE3220_BAZ_H)
+    #define DELETEME_H // define it
+
+
+    // code declarations go here
+
+    #endif
+
+    - Names that start with _ or __ always indicate system header files and are not for consumer use. Only for system libraries and the kernel.
+
+- Translation Unit
+    . Your code, any code that you pull in from the preprocess translation header.
+    . Cannot include definitions more than one time in a translation unit.
+    
+
+
+TAKING OFF THE TRAINING WHEELS FOR MAKE AND CREATING A MAKEFILE LIKE A MAN:
+
