@@ -1,0 +1,13 @@
+Notes October 30:
+
+Polymorphism:
+A -> B -> C
+ai  bi  ci
+
+A *pa = &bi // this pointer can hold any of these objects (object heirarchy). Can hold as long as the types are derived
+- However using this pointer you can only get access to the chunks of the object that are relevant to class A.
+
+LATE BINDING: (The most important aspect of Polymorphism)
+- Only occurs to classes that are considered virtual
+
+
