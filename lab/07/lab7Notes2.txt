@@ -1,0 +1,45 @@
+
+HOW TO MANUALLY CREATE AN OUTPUT FILE:
+    gcc -c foo.c -> spits out a .o file
+    g++ -c main.cc -> spits out a .o file
+    etc.
+
+    g++ *.o -o demo -> goes into the demo exe
+
+- In order to make an executable program we need to stitch the .o files together
+- To stitch them together we have to use the linker (use the compiler to invoke the linker)
+- TWO COMPILER OPTIONS:
+    gcc (c compiler)
+    g++ (c++ compiler) USE THIS ONE FOR C++ CODE
+- *.o will find all of the .o file endings in your directory (this is called glob)
+- $(wildcard *.c) wildcard can do glob matchings
+
+BIG NOTE: THIS WILL MESS UP YOUR PROGRAM
+    - Each recipe line must begin with a tab ^v to verbose and then whatever thing needs to be unmodified
+
+THE PIPE CHARACTER:
+    | grep CXX (will limit the results to only the lines that contain CXX)
+    | less (same as man and will let your scroll around)
+        . To search within this just type /"SEARCH", n=down, N=up
+
+SEARCH AND REPLACE:
+    :s/foo/bar/g    FINDS EACH OCCURANCE AND REPLACE IT
+    :%s/foo/bar/g   FIND ALL OCCURANCES AND REPLACE
+    :s/foo/bar/gc   ASK FOR CON FIRST
+    :%s/foo/bar/gc  ASK FOR CON FIRST
+
+TO HAVE THE PREPROCESSOR SPIT OUT ALL OF ITS DEPENDENCIES:
+    cpp -M main.cc
+    And to list only the dependencies in your own project
+    cpp -MM main.cc
+
+TRICK TO STORE DEPENDENCIES:
+    cpp -MM foo.c >deps/foo.d // will store all of your dependencies there
+    - Then list the dependencies with the cat deps/foo.d command
+    - ONCE WE HAVE STORED ALL OF OUR DEPENDENCIES WE CAN SLURP THESE INTO OUT MAKEFILE
+
+-f means force and wont ask about each individual file
+-r means recursive so the force will work for a folder
+
+- only after the .o files exist does the dependency rules change and they say if the .o files have to be rebuilt
+- because of dependencies we only rebuild files that have changed
