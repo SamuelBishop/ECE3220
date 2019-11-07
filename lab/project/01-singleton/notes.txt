@@ -1,0 +1,24 @@
+An example implementation of the singleton design pattern in C++ can be found
+here:
+
+https://stackoverflow.com/a/1008289/5051940
+
+
+:: Static Storage for the Singleton Object ::
+
+If the singleton object has static storage duration, storage for the object
+is allocated when the program is loaded into memory (e.g. storage in a
+.data segment or the .bss segment), and this storage persists until the
+program terminates.  The object is initialized / constructed the first time
+control reaches the line of code that declares the object. If the object
+has class type, the object is destructed after control exits function
+main().
+
+:: Dynamic Storage for the Singleton Object ::
+
+If storage for the singleton object is allocated dynamically from the heap
+via `new', use the C++ idiom known as a "nifty counter" (a.k.a., a Schwarz
+Counter) to determine when it's appropriate to deallocate the object's
+storage.  See also:
+https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Nifty_Counter
+
