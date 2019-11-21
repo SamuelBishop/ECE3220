@@ -1,0 +1,93 @@
+SPI BUS LAB:
+
+- The accessory board that we have has a MCP3004 Analog-to-Digital Converter chip on it
+   . This ADC has four channels (0-3)
+   . ch1 goes to potentiometer (wiper) and does a voltage divider that will change the input
+
+- SPI (Serial Pheripheral Interface) bus for the ADC is on top and connects to the 
+    . Clock tick (information goes both directions per clock tick FULL DUPLEX)
+    . Full Duplex (Both lines can communicate at the same time)
+    . Half Duplex (Only one bit of data sent in a single direction per clock tick)
+
+- The chip we are using in the four input version of the ADC chip
+
+WHAT THE ADC DOES: (Voltage in voltage ranges discrete write a number)
+    - Voltage from 0-2.5V digital writes a 0
+    - Voltage from 2.5-5V digital writes a 1
+
+    CAN BE MODIFIED FOR 2^10 - 1 POSSIBLE VALUES FOR ANALOG:
+    - Example: 5/1023 range span segments.
+
+HOW IT WORKS:
+    - The multiplexer takes a channel input
+    - The channel input is decoded by the multiplexer and is given to the Sample and Hold channel
+        . Sample and hold is a series of switches that choose when the dischared voltage is accepted??
+        . Uses a mostfet to charge and discharge a capacitor
+        . After the mostfet the charge from the capacitor sits there, and the digital -Analog converter will cycle through
+            all the possible inputs until it finds the range that correlates to the capacitor voltage.
+        . MISO vs MOSI (Master in slave out vs master our slave in) How to know which signals are wanted???
+        . Power supply is super noisy and want to have a super stable voltage reference, need an external power supply for this.
+    - The SPI bus is supported by both the microcontroller and the ADC.
+    - SPI BUS is just a communication protocol, there are many. However SPI BUS and i^2c are the two most common. (MOST/ALL ICS have
+        have a communication protocol.
+    - 
+
+Daisy Chaining:
+    - The spi bus supports daisy chainning which is where the ADC is MISO is connected to another MOSI on a different ADC, this can
+        be compacted for as many ADCs as you want. Creates a giant bit shifting system with ADC clock delay speed.
+    - All of the clock speeds must be the same.
+    - Saves pins on the microcontroller.
+
+RPI Notes:
+    - ls /dev shows you all of the different hardware devices on the rpi
+        . We will be working with spidev0 (spidev0.0 is chip enable 0 and spidev0.1 is chip enable 1)
+
+Endian-ness:
+    - Little endian means that the least significant byte is stored at the address of the location.
+    - Big endian means that the most significant byte is stored at the address of the location.
+
+    - The ADC is set up for big endian...
+    - The rpi linux os is set up for big endian...
+        THIS SUCKS. But there are built in functions to perform byte swapping! This is such a common problem. The grad student
+        who mad the accessory board probably didnt even have to do that much additional work.
+
+Useful information:
+    - 2^10 = 1KB
+    - 2^20 = 1MB
+    - 2^30 = 1GB
+    - 2^40 = 1TB
+
+    -?word searches vim
+        .shift+n = next
+        .n = back
+
+    - Wrap into a tarball by:
+        tar cz -f 04-adc-sjbc35.tar.gz 04-adc
+
+HIGH-Z STATE:
+    - Something about pull down or pull up??
+    - On RPI the value is pulled down to logic low through voltage divider. Ticks are always pulled down to low unless there is a driver behind it.
+
+HOW DOES CLOCK COMMUNICATION WORK OVER SPI?:
+    - Start bit is the bit before the communcation is opened. Will always be 1 when open communication.
+
+    - First clock tick is SGL/DIFF (single ended mesaurment mode (channel in and ground difference) or 
+        differential mode (two different sample channels). Can simulat a differential input with two single ended inputs.
+    - D0 (Channel 1 input on?)
+    - D1 (Channel 2 input on?)
+    - D2 (Channel 3 input on?)
+    - D3 (Channel 4 input on?)
+    - NULL Bit
+    - B9-B0 (Ten bit conversion value)
+    - Excess data (4byte remainder usually filled with 0s)
+
+UNION type in C and C++:
+    - No type assosicated with union makes it an anonymous union.
+    - Can interperit a chunk of memory as multiple different types. Example in rpi-accessory.cc.
+    - Can byte swap to the big endian format EX __builtin_bswap32(0x00019000).
+
+WHAT TO DO BECAUSE YOU DONT HAVE YOUR SD CARD:
+1) mount.rpifs
+2) decompress the tarball of the rpi w/
+    tar xf ~/Downloads/04-adc.tar.gz -C PIFOLDER
+                                      ^ Change dir
