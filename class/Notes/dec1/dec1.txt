@@ -1,0 +1,27 @@
+General Notes From December 2:
+
+For mutithreaded things a MUTEX (Mutual exclusion object is used):
+    - Waiting threads are put into a queue
+    - Think of mutex like a bathroom key
+    
+    EXAMPLE:
+
+#include <mutex>
+
+std::mutex m; // include the mutex as a global
+
+void thread()
+{
+    m.lock(); // locks protect sequencing for shared resources
+    cout << "Hello from thread." << endl;
+    m.unlock();
+}
+
+int main()
+{
+    m.lock(); 
+    cout << "Hello from main." << endl; // using the shared resource
+    m.unlock(); 
+
+    return 0;
+}
