@@ -16,7 +16,7 @@ namespace ece3220 {
 const int rpi3b_accessory :: spi_adc_csid = 0;
 
 
-const int rpi3b_accessory :: spi_adc_csid = /* YOUR ANSWER HERE: 0 or 1 */ ;
+//const int rpi3b_accessory :: spi_adc_csid = /* YOUR ANSWER HERE: 0 or 1 */ ;
 
 
 // The frequency, in Hertz, for the Raspberry Pi's SPI bus's SCLK line.
@@ -80,7 +80,7 @@ rpi3b_accessory :: rpi3b_accessory ()
     // wiringPiSPISetup() returns -1 on error.
     // (n.b. The RPI uses the SPI bus to communicate with the Microchip
     // MCP3004 Analog-to-Digital Conversion (ADC) IC.)
-    if ( wiringPi::wiringPiSPISetup( adc_spi_csid, spi_sclk_freq ) == -1 )
+    if ( wiringPi::wiringPiSPISetup( spi_adc_csid, spi_sclk_freq ) == -1 )
         throw std::runtime_error("[rpi3b_accessory()] Library call wiringPi::wiringPiSPISetup() returned error code -1");
 }
 
@@ -233,7 +233,7 @@ rpi3b_accessory :: adcSample( rpi3b_accessory::adc_channel_t  adc_channel )
     // first offset location
     wiringPi::wiringPiSPIDataRW( spi_adc_csid, &spibuf.adcBuffer[1], 3 ); // can send three bytes not rather than 4.
 
-    spibuf.adcReply = __builtin_bswap32(spibuf,adcReply); // need to implement byteswap to get the rotated bytes back into the pi.
+    spibuf.adcReply = __builtin_bswap32(spibuf.adcReply); // need to implement byteswap to get the rotated bytes back into the pi.
 
     return spibuf.adcReply ;
 }
