@@ -95,7 +95,10 @@ public:
      */
     inline void ledOffAll()
     {
-        ledWriteAll(0);
+        wiringPi::digitalWrite ( led_red,	LOW );
+	wiringPi::digitalWrite ( led_green,	LOW );
+	wiringPi::digitalWrite ( led_yellow,	LOW );
+	wiringPi::digitalWrite ( led_blue,	LOW );
     }
 
 
@@ -104,7 +107,11 @@ public:
      */
     inline void ledOn( led_type color )
     {
-        wiringPi::digitalWrite(color,1);
+        wiringPi::digitalWrite ( led_red,	HIGH );
+	wiringPi::digitalWrite ( led_green,	HIGH );
+	wiringPi::digitalWrite ( led_yellow,	HIGH );
+	wiringPi::digitalWrite ( led_blue,	HIGH );
+ 
     }
 
 
@@ -143,12 +150,12 @@ private:
     // virtual pin numbers on the RPI3B's 40-pin header.
     //
     enum display_type {
-        display_bcd_a  = ?,
-        display_bcd_b  = ?,
-        display_bcd_c  = ?,
-        display_bcd_d  = ?,
-        display_dp     = ?,
-        display_enable = ?
+        display_bcd_a  = 5,
+        display_bcd_b  = 6,
+        display_bcd_c  = 25,
+        display_bcd_d  = 2,
+        display_dp     = 4,
+        display_enable = 29
     };
 
  
@@ -183,6 +190,10 @@ public:
     inline void  displayOff()
     {
         /* your code here... */
+	wiringPi::digitalWrite ( display_bcd_a,	LOW );
+	wiringPi::digitalWrite ( display_bcd_b,	LOW );
+	wiringPi::digitalWrite ( display_bcd_c,	LOW );
+	wiringPi::digitalWrite ( display_bcd_d,	LOW );
     }
 
 
@@ -190,7 +201,12 @@ public:
      */
     inline void  displayOn()
     {
-        /* your code here... */
+    	/* your code here... */
+	wiringPi::digitalWrite ( display_bcd_a,	HIGH );
+	wiringPi::digitalWrite ( display_bcd_b,	HIGH );
+	wiringPi::digitalWrite ( display_bcd_c,	HIGH );
+	wiringPi::digitalWrite ( display_bcd_d,	HIGH );
+    
     }
 
 
@@ -199,6 +215,7 @@ public:
     inline void  displayDecimalPoint( int state )
     {
         /* your code here... */
+	wiringPi::digitalWrite ( display_dp, state );
     }
 
 
@@ -207,6 +224,18 @@ public:
     inline displayState_type  getDisplayBlankingState() const
     {
         /* your code here... */
+	if ( display_bcd_a == LOW 
+	     && display_bcd_b == LOW 
+	     && display_bcd_c == LOW
+     	     && display_bcd_d == LOW
+	   )
+	{ 
+		return displayBlanked; 
+	}
+	else
+	{ 
+		return displayEnabled; 
+	}	
     }
 
 };  // class rpi3b_accessory

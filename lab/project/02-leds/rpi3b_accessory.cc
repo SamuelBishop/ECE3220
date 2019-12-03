@@ -7,7 +7,7 @@ namespace ece3220 {
 rpi3b_accessory :: rpi3b_accessory ()
 {
     // wiringPi library setup() call
-    wiringPiSetup();
+    wiringPi::wiringPiSetup();
 
     /* LEDs */
    

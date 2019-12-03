@@ -53,7 +53,7 @@ public:
     // on the RPI3B's 40-pin header that's connected to the specified LED
     // color on the accessory board.
     //
-    // HINT: At a command shell prompt type 'gpio readall' to display /* Your code here ... */a
+    // HINT: At a command shell prompt type 'gpio readall' to display
     // diagram that shows the mapping between physical pin numbers and wPi
     // virtual pin numbers on the RPI3B's 40-pin header.
     //
