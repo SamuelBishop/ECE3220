@@ -190,10 +190,11 @@ public:
     inline void  displayOff()
     {
         /* your code here... */
-	wiringPi::digitalWrite ( display_bcd_a,	LOW );
-	wiringPi::digitalWrite ( display_bcd_b,	LOW );
-	wiringPi::digitalWrite ( display_bcd_c,	LOW );
-	wiringPi::digitalWrite ( display_bcd_d,	LOW );
+	displayState = displayBlanked; // disables
+	wiringPi::digitalWrite ( display_enable,	displayState );
+	//wiringPi::digitalWrite ( display_bcd_b,	LOW );
+	//wiringPi::digitalWrite ( display_bcd_c,	LOW );
+	//wiringPi::digitalWrite ( display_bcd_d,	LOW );
     }
 
 
@@ -202,10 +203,11 @@ public:
     inline void  displayOn()
     {
     	/* your code here... */
-	wiringPi::digitalWrite ( display_bcd_a,	HIGH );
-	wiringPi::digitalWrite ( display_bcd_b,	HIGH );
-	wiringPi::digitalWrite ( display_bcd_c,	HIGH );
-	wiringPi::digitalWrite ( display_bcd_d,	HIGH );
+	displayState = displayEnabled; // enables
+	wiringPi::digitalWrite ( display_enable,	displayState );
+	//wiringPi::digitalWrite ( display_bcd_b,	HIGH );
+	//wiringPi::digitalWrite ( display_bcd_c,	HIGH );
+	//wiringPi::digitalWrite ( display_bcd_d,	HIGH );
     
     }
 
@@ -224,18 +226,18 @@ public:
     inline displayState_type  getDisplayBlankingState() const
     {
         /* your code here... */
-	if ( display_bcd_a == LOW 
-	     && display_bcd_b == LOW 
-	     && display_bcd_c == LOW
-     	     && display_bcd_d == LOW
-	   )
-	{ 
-		return displayBlanked; 
-	}
-	else
-	{ 
-		return displayEnabled; 
-	}	
+		if ( display_bcd_a == LOW 
+	    	 && display_bcd_b == LOW 
+	    	 && display_bcd_c == LOW
+        	 && display_bcd_d == LOW
+	   	)
+		{ 
+			return displayBlanked; 
+		}
+		else
+		{ 
+			return displayEnabled; 
+		}	
     }
 
 };  // class rpi3b_accessory

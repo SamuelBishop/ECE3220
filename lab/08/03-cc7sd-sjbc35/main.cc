@@ -1,4 +1,4 @@
-#include <cstdlib>
+#include <sstream>
 #include <iostream>
 #include <unistd.h>
 #include "rpi3b_accessory.h"
@@ -19,11 +19,13 @@ ready_for_input( rpi3b_accessory &a, const useconds_t sleep_time = 500000 )
 }
 
 void
-disp_valid_usr_input( rpi3b_accessory &a, const useconds_t sleep_time = 500000 )
+disp_valid_usr_input( rpi3b_accessory &a, int user_input, const useconds_t sleep_time = 500000 )
 {
 	a.ledWriteAll( LOW );
 	usleep( sleep_time );
 	a.ledWrite( rpi3b_accessory::led_green, HIGH);
+	a.displayOn();
+	a.displayWrite( user_input );
 	usleep( sleep_time );
 }
 
@@ -48,18 +50,42 @@ int main()
     int user_choice;
     const useconds_t sleep_time = 500000;
 
-    ready_for_input( a );
+	// ready for input
+	try{   
+		while( user_choice != 20){
+			ready_for_input( a );						// steps 1 & 2
+			cin >> user_choice;
+			// check if CTRL+D					
+			if( cin.eof() ){							// step 3
+				break; 									// will always return an exit code of 0
+			}
+			// check if non-integer value
+			if( !cin >> user_choice ){					// step 6
+				ostringstream msg;
+				msg << "Received input of non-integer data type.";
+				throw runtime_error( msg.str() );
+			}
+			if( user_choice >= 0 && user_choice <= 9 ){	// step 4
+				disp_valid_usr_input( a, user_choice );
+			}
+			else{										// step 5
+				disp_invalid_usr_input( a );
+			}
+		}
+	}
 
-    cin >> user_choice;
-    while( user_choice != 20){
-	    if( user_choice >= 0 && user_choice <= 9 ){
-		disp_valid_usr_input( a );
-	    }
-	    else{
-		disp_invalid_usr_input( a );
-	    }
-    }
-    //a.displayOn();
+	// catch runtime errors
+	catch ( const std::runtime_error &err ){
+		cerr << "\n:: ERROR :: " << err.what() << endl;
+        exit_code = 1;
+	}
+
+	// catch general errors
+	catch ( ... ) {
+        cerr << "\n:: ERROR :: Unexpected exception thrown" << endl;
+        exit_code = 3;
+	}
+    
 
     return exit_code;
 }
