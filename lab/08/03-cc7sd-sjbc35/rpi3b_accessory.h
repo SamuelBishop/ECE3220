@@ -96,9 +96,9 @@ public:
     inline void ledOffAll()
     {
         wiringPi::digitalWrite ( led_red,	LOW );
-	wiringPi::digitalWrite ( led_green,	LOW );
-	wiringPi::digitalWrite ( led_yellow,	LOW );
-	wiringPi::digitalWrite ( led_blue,	LOW );
+		wiringPi::digitalWrite ( led_green,	LOW );
+		wiringPi::digitalWrite ( led_yellow,	LOW );
+		wiringPi::digitalWrite ( led_blue,	LOW );
     }
 
 
@@ -108,10 +108,9 @@ public:
     inline void ledOn( led_type color )
     {
         wiringPi::digitalWrite ( led_red,	HIGH );
-	wiringPi::digitalWrite ( led_green,	HIGH );
-	wiringPi::digitalWrite ( led_yellow,	HIGH );
-	wiringPi::digitalWrite ( led_blue,	HIGH );
- 
+		wiringPi::digitalWrite ( led_green,	HIGH );
+		wiringPi::digitalWrite ( led_yellow,	HIGH );
+		wiringPi::digitalWrite ( led_blue,	HIGH );
     }
 
 
@@ -190,11 +189,8 @@ public:
     inline void  displayOff()
     {
         /* your code here... */
-	displayState = displayBlanked; // disables
-	wiringPi::digitalWrite ( display_enable,	displayState );
-	//wiringPi::digitalWrite ( display_bcd_b,	LOW );
-	//wiringPi::digitalWrite ( display_bcd_c,	LOW );
-	//wiringPi::digitalWrite ( display_bcd_d,	LOW );
+		displayState = displayBlanked; // disables
+		wiringPi::digitalWrite ( display_enable,	displayState );
     }
 
 
@@ -203,12 +199,8 @@ public:
     inline void  displayOn()
     {
     	/* your code here... */
-	displayState = displayEnabled; // enables
-	wiringPi::digitalWrite ( display_enable,	displayState );
-	//wiringPi::digitalWrite ( display_bcd_b,	HIGH );
-	//wiringPi::digitalWrite ( display_bcd_c,	HIGH );
-	//wiringPi::digitalWrite ( display_bcd_d,	HIGH );
-    
+		displayState = displayEnabled; // enables
+		wiringPi::digitalWrite ( display_enable,	displayState );
     }
 
 
@@ -217,7 +209,7 @@ public:
     inline void  displayDecimalPoint( int state )
     {
         /* your code here... */
-	wiringPi::digitalWrite ( display_dp, state );
+		wiringPi::digitalWrite ( display_dp, state );
     }
 
 
@@ -226,18 +218,7 @@ public:
     inline displayState_type  getDisplayBlankingState() const
     {
         /* your code here... */
-		if ( display_bcd_a == LOW 
-	    	 && display_bcd_b == LOW 
-	    	 && display_bcd_c == LOW
-        	 && display_bcd_d == LOW
-	   	)
-		{ 
-			return displayBlanked; 
-		}
-		else
-		{ 
-			return displayEnabled; 
-		}	
+		return displayState;
     }
 
 };  // class rpi3b_accessory

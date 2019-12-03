@@ -1,6 +1,8 @@
 #include <memory>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
+#include <bitset>
 #include "rpi3b_accessory.h"
 
 namespace ece3220 {
@@ -30,6 +32,15 @@ rpi3b_accessory :: rpi3b_accessory ()
     // the decimal point LED on the 7-segment display, and then turn OFF
     // all the segments and the decimal point on the 7-segment display.
     /* your code here ... */
+	wiringPi::pinMode( display_bcd_a, OUTPUT );
+    wiringPi::pinMode( display_bcd_b, OUTPUT );
+    wiringPi::pinMode( display_bcd_c, OUTPUT );
+    wiringPi::pinMode( display_bcd_d, OUTPUT );
+    wiringPi::pinMode( display_dp, OUTPUT );
+    wiringPi::pinMode( display_enable, OUTPUT );
+	displayOff();
+	displayDecimalPoint( LOW );
+   
 }
 
 
@@ -101,17 +112,27 @@ rpi3b_accessory :: displayWrite( const uint8_t bcdValue )
 
     // Save the CD4511B's current blanking state
     /* your code here ... */
+	displayState_type current_blanking_state = getDisplayBlankingState();
 
     // Ensure the 7-segment is blanked (OFF) before changing the BCD value
     // at the "ABCD" inputs on the CD4511B IC.
     /* your code here... */
+	displayOff();
 
     // Output the BCD value specified by `bcdValue' to the CD4511B's ABCD
     // input pins.
     /* your code here... */
+	std::string s = std::bitset<4>(bcdValue).to_string();
+	std::cout << s[0] << " " << s[1] << " " << s[2] << " " << s[3] << std::endl;
+	
+	wiringPi::digitalWrite( display_bcd_a, ((int)s[3] - (int)'0') );
+	wiringPi::digitalWrite( display_bcd_b, ((int)s[2] - (int)'0') );
+	wiringPi::digitalWrite( display_bcd_c, ((int)s[1] - (int)'0') );
+	wiringPi::digitalWrite( display_bcd_d, ((int)s[0] - (int)'0') );
 
     // Restore the CD4511B's saved blanking state
     /* your code here... */
+	wiringPi::digitalWrite( display_enable, current_blanking_state );
 }
 
 } // namespace ece3220

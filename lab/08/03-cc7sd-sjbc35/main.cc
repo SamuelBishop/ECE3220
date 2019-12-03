@@ -6,7 +6,7 @@
 using namespace ece3220;
 using namespace std;
 
-/* Steps 1 and 2 in the lab document
+/* Steps 1 and 2 on the lab document
  * Turns off the LEDs, and then flashes the blue LED to prompt input.
  */
 void
@@ -18,6 +18,9 @@ ready_for_input( rpi3b_accessory &a, const useconds_t sleep_time = 500000 )
     a.ledWrite( rpi3b_accessory::led_blue, HIGH); // indicating wait for user input
 }
 
+/* Step 4 on the lab document
+ * Turns off the LEDs, flashes the green LED, and displays the BCD val on 7-seg disp
+ */
 void
 disp_valid_usr_input( rpi3b_accessory &a, int user_input, const useconds_t sleep_time = 500000 )
 {
@@ -29,6 +32,9 @@ disp_valid_usr_input( rpi3b_accessory &a, int user_input, const useconds_t sleep
 	usleep( sleep_time );
 }
 
+/* Step 5 on the lab document
+ * Turns off the LEDs, and then flashes the red led, turns off the 7-seg display
+ */ 
 void
 disp_invalid_usr_input( rpi3b_accessory &a, const useconds_t sleep_time = 500000 )
 {
