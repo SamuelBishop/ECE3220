@@ -2,6 +2,7 @@
 
 #include "foo.h"
 #include "main.h"
+#include <wiringPi.h>
 
 void bar() { /* ... */ }
 

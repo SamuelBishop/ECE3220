@@ -1,0 +1,38 @@
+FINAL EXAM:
+
+THE FINAL IS WEDNESDAY FROM 12:30-2:30
+
+- Static and late binding (virtual (Destructor) ) 		REALLY NEED TO REVIEW HE TALKED A LOT ABOUT THIS
+- Access specifiers ( look up friend declarations )
+	. Understand how these affect inheritance
+	. 
+- Scope and Scope Resolution
+- Storage Class Specifiers and Linkage
+	. static variables persist through program loaded and unloaded in memory
+		. instantiated in the .bss segment
+	. local variables
+		. in data segment, do not persist
+	. global variables
+		. default to external linkage
+		. extern "C" turns off name mangling in order to link c module into c++ module
+	. Heap
+		. Any data in the unused (blank portion of the ram)
+		. Used for dynamic memory allocation
+	. Threads
+		. Go into existence when thread is spawned
+		. Pops out of existence when thread is "destroyed"?
+		. Each thread has own distince copy of variable
+- Make script for lecture/ lab
+
+
+
+NOTE:
+- Don't worry about method pointers for final
+	. Know other types of pointers tough
+- Atomic class??
+	. Part of the lab practical
+	. Something about signaling
+- MUTEX
+	. Talked about in lab. For multiple threads sharing a same object.
+	. Important for preventing simultaneous use of an object, protects from data inconsistency.
+	. 
