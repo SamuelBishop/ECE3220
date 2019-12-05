@@ -122,9 +122,7 @@ rpi3b_accessory :: displayWrite( const uint8_t bcdValue )
     // Output the BCD value specified by `bcdValue' to the CD4511B's ABCD
     // input pins.
     /* your code here... */
-	std::string s = std::bitset<4>(bcdValue).to_string();
-	std::cout << s[0] << " " << s[1] << " " << s[2] << " " << s[3] << std::endl;
-	
+	std::string s = std::bitset<4>(bcdValue).to_string();	
 	wiringPi::digitalWrite( display_bcd_a, ((int)s[3] - (int)'0') );
 	wiringPi::digitalWrite( display_bcd_b, ((int)s[2] - (int)'0') );
 	wiringPi::digitalWrite( display_bcd_c, ((int)s[1] - (int)'0') );
