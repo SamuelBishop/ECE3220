@@ -1,0 +1,16 @@
+
+INSTRUCTIONS
+
+On the DESKTOP computer, open a command shell
+window and then invoke the following commands:
+
+vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+mount.rpifs -q
+cd ~/rpifs/home/pi/ece3220-practical-$USER
+make dist
+cd
+ls ece3220-practical-${USER}.tar.gz
+tar tvf ece3220-practical-${USER}.tar.gz
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
