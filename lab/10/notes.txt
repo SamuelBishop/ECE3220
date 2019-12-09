@@ -1,0 +1,42 @@
+Lab 10 Notes
+
+CONCURRENCY CONTROL->
+How do we prevent threads from grabbing the same variable and altering the memory
+at the same time?:
+
+CPU Format:
+- Multiple cores
+- In each core we have multiple threads and multiple caches
+- The threads manipulte the cache that manipulate the RAM
+	. The act of clearing the cache into RAM is called flushing
+
+Critical Section: A section of code where we have to take extra precautions that
+data we are reading and writing are up to date (shared resources).
+
+Atomic Operations: A process that cannot be interrupted until a core finishes its read,
+modify, and write functions.
+
+MUTEX (MUTual EXclusion object): Like a key. Controlled access to a resource.
+Used to ensure atomisity in critical section.
+- Should not be used inside of an inturrupt
+
+Circuitry of the Accessory Board:
+- Bottom of the circuit w/ logic gates performs a task called debouncing. To left.
+- Switches will turn on/off/on etc when toggled until settled. Processor reads them fast.
+	. To fix you could put a capacitor down that charges up immediately and discharges
+	slowly. Never discharges far enough to get off of logic high.
+	. Software debouncing can be done but it will always take longer than hardware
+	debouncing.
+- Logic chips are inverter & _____
+	. Weird gate is called a schmidt trigger. It is necessary because voltage of signal
+	follows the noise of the voltage input, and and ordinary gate might glitch 3/4
+	times before the final state transition.
+	  The schmidt trigger has two thresholds and needs to pass both thresholds in order
+	to be considered a logic high.
+	
+IMPLEMENTING AN INTURRUPT SERVICE ROUTINE:
+- In the wiringPi page on the internet the inturrupt section is listed under:
+	Program, timing, and threads
+- The function that prompts an inturrupt service routine is called:
+	wiringPiSR(int pin, int edgeType, void (*function)(void));	
+	. This is telling the wiringPi library the function for the pin event we want to watch- 

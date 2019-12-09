@@ -58,7 +58,7 @@ int main()
 
 	// ready for input
 	try{   
-		while( user_choice != 20){
+		while( 1 ){
 			ready_for_input( a );						// steps 1 & 2
 			cin >> user_choice;
 			// check if CTRL+D					
