@@ -1,0 +1,92 @@
+main.cc
+9 #include <atomic>
+11 #include <mutex>
+
+std::atomic<bool>  g_pushbutton1_event_signal { false };
+std::mutex  cout_mutex ;
+
+
+void
+ 53 ISR_Pushbutton1_Event()
+ 54 {
+ 55     // Inform the other threads that pushbutton 1 was pressed.
+ 56     g_pushbutton1_event_signal.store( true );
+ 57 
+ 58     { // critical section
+ 59         std::lock_guard<std::mutex>  lg ( cout_mutex );
+ 60         cout << __PRETTY_FUNCTION__ << endl;
+ 61     }
+ 62 }
+
+void
+ 55 ready_for_input( rpi3b_accessory &a, const useconds_t sleep_time = 500000 )
+ 56 {
+ 57     a.ledWriteAll( LOW );
+ 58     a.displayOff();
+ 59     usleep( sleep_time );
+ 60 }
+ 61 
+ 62 void
+ 63 ISR_Pushbutton1_Event()
+ 64 {
+ 65     // Inform the other threads that pushbutton 1 was pressed.
+ 66     g_pushbutton1_event_signal.store( true );
+ 67 
+ 68     { // critical section
+ 69         std::lock_guard<std::mutex>  lg ( cout_mutex );
+ 70         cout << __PRETTY_FUNCTION__ << endl;
+ 71     }
+ 72 }
+
+a.RegisterISR( rpi3b_accessory::switch_pushbutton1,
+131                 INT_EDGE_RISING, &ISR_Pushbutton1_Event );
+132 
+133         a.RegisterISR( rpi3b_accessory::switch_pushbutton5,
+134                 INT_EDGE_RISING, &ISR_Pushbutton5_Event );
+135 
+136         a.RegisterISR( rpi3b_accessory::switch_slider1,
+137                 INT_EDGE_BOTH, &ISR_Slider_Event );
+
+139         ready_for_input( a );
+140         // Loop until the user presses pushbutton 1 (BTN1)
+141         do {
+142 
+143             /* Your code here... */
+144             if( g_pushbutton1_event_signal.load() ){
+145                 g_pushbutton1_event_signal.store( false );
+146                 a.ledWrite( rpi3b_accessory::led_green, wiringPi::digitalRead( rpi3b_accesso    ry::switch_pushbutton1 ));
+147             }
+148 
+149             if( g_pushbutton5_event_signal.load() ){
+150                 g_pushbutton5_event_signal.store( false );
+151                 a.ledWrite( rpi3b_accessory::led_red, wiringPi::digitalRead (rpi3b_accessory    ::switch_pushbutton5 ) );
+152             }
+153 
+154             if( g_slider_event_signal.load() ){
+155                 g_slider_event_signal.store( false );
+156                 a.ledWrite( rpi3b_accessory::led_blue, wiringPi::digitalRead (rpi3b_accessor    y::switch_slider1 ) );
+157             }
+158 
+159         } while ( ! g_pushbutton5_event_signal.load() );
+
+
+
+
+
+rpi3b_accessory.cc
+ 94     /* Your code here... */
+ 95     wiringPi::pinMode( switch_pushbutton1, INPUT );
+ 96     wiringPi::pinMode( switch_pushbutton5, INPUT );
+ 97     wiringPi::pinMode( switch_slider1, INPUT );
+
+
+
+
+rpi3b_accessory.h
+ 49     inline int switchRead ( switch_type sw )
+ 50     {
+ 51         /* your code here... */
+ 52         int on_off_var = wiringPi::digitalRead( sw );
+ 53         return on_off_var;
+ 54     }
+
